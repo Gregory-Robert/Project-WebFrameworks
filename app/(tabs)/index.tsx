@@ -1,11 +1,13 @@
 import { COLORS } from "@/constants/colors";
+import { TransactionsContext } from "@/context/TransactionsContext";
 import { useRouter } from "expo-router";
+import { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const Home = () => {
   const router = useRouter();
+  const { totalBalance } = useContext(TransactionsContext);
 
-  const totalBalance = 100;
   const isCredit = totalBalance !== undefined && totalBalance > 0;
 
   return (

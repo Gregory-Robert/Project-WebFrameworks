@@ -10,13 +10,15 @@ import {
 } from "react";
 
 interface TransactionsContextType {
+  totalBalance: number;
   transactions: Transaction[];
   loading: boolean;
   error: Error | null;
   refetch: () => void;
 }
 
-const TransactionsContext = createContext<TransactionsContextType>({
+export const TransactionsContext = createContext<TransactionsContextType>({
+  totalBalance: 0,
   transactions: [],
   loading: false,
   error: null,
@@ -27,6 +29,14 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const { loading, data, error, refetch } = useFetch<Transaction[]>(
     "https://sampleapis.assimilate.be/fakebank/accounts"
+  );
+
+  const totalBalance = Number(
+    (
+      transactions.reduce((sum, t) => {
+        return sum + (t.credit || 0) - (t.debit || 0);
+      }, 0) ?? 0
+    ).toFixed(2)
   );
 
   useEffect(() => {
@@ -56,6 +66,7 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
   return (
     <TransactionsContext.Provider
       value={{
+        totalBalance,
         transactions,
         loading,
         error,
