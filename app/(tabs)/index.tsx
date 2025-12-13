@@ -15,7 +15,7 @@ const Home = () => {
       <Pressable
         style={styles.card}
         onPress={() => {
-          router.push("/transactions");
+          router.replace("/transactions");
         }}
       >
         <View style={styles.left}>

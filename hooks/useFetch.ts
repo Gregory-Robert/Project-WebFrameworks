@@ -13,6 +13,8 @@ export function useFetch<T>(url: string): FetchState<T> {
   const [loading, setLoading] = useState<boolean>(false);
   const [trigger, setTrigger] = useState<number>(0);
 
+  const token = process.env.EXPO_PUBLIC_FAKEBANK_TOKEN;
+
   const refetch = () => setTrigger((trigger) => trigger + 1);
 
   useEffect(() => {
@@ -20,7 +22,11 @@ export function useFetch<T>(url: string): FetchState<T> {
     const fetchData = async () => {
       try {
         setLoading(true);
-        const response = await fetch(url);
+        const response = await fetch(url, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
         if (!response.ok) {
           throw new Error("Something went wrong fetching data");
         }

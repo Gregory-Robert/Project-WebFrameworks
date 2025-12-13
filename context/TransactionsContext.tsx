@@ -1,5 +1,6 @@
 import { OPENING_BALANCE } from "@/constants/transactionConstants";
 import { useFetch } from "@/hooks/useFetch";
+import { usePostTransaction } from "@/hooks/usePostTransaction";
 import { Transaction } from "@/types";
 import {
   createContext,
@@ -31,6 +32,8 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
     "https://sampleapis.assimilate.be/fakebank/accounts"
   );
 
+  const { postTransaction } = usePostTransaction();
+
   const totalBalance = Number(
     (
       transactions.reduce((sum, t) => {
@@ -40,25 +43,23 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
   );
 
   useEffect(() => {
-    const loadTransactions = () => {
+    const loadTransactions = async () => {
       if (!data) return;
 
-      // Sort by date (Newest first)
-      const sortedTransactions = [...data].sort(
-        (a, b) =>
-          new Date(b.transactionDate).getTime() -
-          new Date(a.transactionDate).getTime()
-      );
+      // Sort by id (Newest = highest id first)
+      const sortedTransactions = [...data].sort((a, b) => b.id - a.id);
 
-      // Included the opening balance so the API-derived total cannot result in a negative balance.
-      const hasOpeningBalance = sortedTransactions.some(
-        (t) => t.id === OPENING_BALANCE.id
-      );
-      if (!hasOpeningBalance) {
-        setTransactions([...sortedTransactions, OPENING_BALANCE]);
-      } else {
-        setTransactions(sortedTransactions);
-      }
+      // //Included the opening balance so the API-derived total cannot result in a negative balance.
+      // const hasOpeningBalance = sortedTransactions.some(
+      //   (t) => t.description === OPENING_BALANCE.description
+      // );
+      // if (!hasOpeningBalance) {
+      //   await postTransaction(OPENING_BALANCE);
+      //   refetch();
+      //   return;
+      // }
+
+      setTransactions(sortedTransactions);
     };
     loadTransactions();
   }, [data]);

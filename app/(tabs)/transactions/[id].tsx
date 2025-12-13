@@ -3,6 +3,7 @@ import { COLORS } from "@/constants/colors";
 import { useLocalSearchParams } from "expo-router";
 import { useContext } from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { formatDate } from "@/utils/formatUtils";
 
 const TransactionDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
@@ -23,13 +24,6 @@ const TransactionDetail = () => {
   const isCredit = transaction?.credit !== undefined && transaction.credit! > 0;
   const amount = isCredit ? transaction.credit! : transaction?.debit!;
   const formattedAmount = amount.toFixed(2);
-  const formattedDate = new Date(
-    transaction!.transactionDate
-  ).toLocaleDateString("nl-BE", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
 
   return (
     <View style={styles.container}>
@@ -49,7 +43,9 @@ const TransactionDetail = () => {
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Date: </Text>
-          <Text style={styles.value}>{formattedDate}</Text>
+          <Text style={styles.value}>
+            {formatDate(transaction.transactionDate)}
+          </Text>
         </View>
         <View style={styles.row}>
           <Text style={styles.label}>Amount: </Text>

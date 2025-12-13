@@ -1,6 +1,6 @@
 import { COLORS } from "@/constants/colors";
 import { DrawerActions } from "@react-navigation/native";
-import { useNavigation } from "expo-router";
+import { useNavigation, useRouter, useSegments } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import { View, Text, StyleSheet, Pressable } from "react-native";
 
@@ -10,12 +10,22 @@ interface HeaderProps {
 
 const Header = ({ button }: HeaderProps) => {
   const navigation = useNavigation();
+  const router = useRouter();
+  const segments = useSegments();
 
   const handlePress = () => {
     if (button === "menu") {
       navigation.dispatch(DrawerActions.openDrawer());
     } else {
-      navigation.goBack();
+      const lastSegment = segments[segments.length - 1];
+
+      if (lastSegment === "transactions") {
+        router.push("/(tabs)");
+      } else if (lastSegment === "addTransaction") {
+        router.push("/(tabs)/transactions");
+      } else {
+        router.back();
+      }
     }
   };
 
