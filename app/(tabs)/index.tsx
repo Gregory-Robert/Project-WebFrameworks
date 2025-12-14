@@ -6,9 +6,17 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const Home = () => {
   const router = useRouter();
-  const { totalBalance } = useContext(TransactionsContext);
+  const { initializing, totalBalance, loading } = useContext(TransactionsContext);
 
   const isCredit = totalBalance !== undefined && totalBalance > 0;
+
+  if (initializing || loading) {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.message}>Loading...</Text>
+      </View>
+    )
+  }
 
   return (
     <View style={styles.container}>
@@ -40,6 +48,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.light,
     paddingTop: 32,
+  },
+  message: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#999999",
+    textAlign: "center",
+    marginBottom: 24,
   },
   card: {
     flexDirection: "row",

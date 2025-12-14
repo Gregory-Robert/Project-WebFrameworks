@@ -11,6 +11,7 @@ import {
 } from "react";
 
 interface TransactionsContextType {
+  initializing: boolean;
   totalBalance: number;
   transactions: Transaction[];
   loading: boolean;
@@ -19,6 +20,7 @@ interface TransactionsContextType {
 }
 
 export const TransactionsContext = createContext<TransactionsContextType>({
+  initializing: false,
   totalBalance: 0,
   transactions: [],
   loading: false,
@@ -28,6 +30,7 @@ export const TransactionsContext = createContext<TransactionsContextType>({
 
 export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [initializing, setInitializing] = useState(true);
   const { loading, data, error, refetch } = useFetch<Transaction[]>(
     "https://sampleapis.assimilate.be/fakebank/accounts"
   );
@@ -44,22 +47,26 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
 
   useEffect(() => {
     const loadTransactions = async () => {
+      setInitializing(true);
       if (!data) return;
 
       // Sort by id (Newest = highest id first)
       const sortedTransactions = [...data].sort((a, b) => b.id - a.id);
 
       // //Included the opening balance so the API-derived total cannot result in a negative balance.
-      // const hasOpeningBalance = sortedTransactions.some(
-      //   (t) => t.description === OPENING_BALANCE.description
-      // );
-      // if (!hasOpeningBalance) {
-      //   await postTransaction(OPENING_BALANCE);
-      //   refetch();
-      //   return;
-      // }
+      const hasOpeningBalance = sortedTransactions.some(
+        (t) => t.description === OPENING_BALANCE.description
+      );
+      if (!hasOpeningBalance) {
+        await postTransaction(OPENING_BALANCE);
+        setTimeout(() => {
+          refetch();
+        }, 1500);
+        return;
+      }
 
       setTransactions(sortedTransactions);
+      setInitializing(false);
     };
     loadTransactions();
   }, [data]);
@@ -67,6 +74,7 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
   return (
     <TransactionsContext.Provider
       value={{
+        initializing,
         totalBalance,
         transactions,
         loading,

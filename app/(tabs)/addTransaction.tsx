@@ -7,8 +7,9 @@ import { useContext, useState } from "react";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 
 const addTransaction = () => {
-  const { transactions, refetch } = useContext(TransactionsContext);
-  const { postTransaction, loading, error } = usePostTransaction();
+  const { totalBalance, transactions, refetch } =
+    useContext(TransactionsContext);
+  const { postTransaction } = usePostTransaction();
 
   const router = useRouter();
 
@@ -20,50 +21,76 @@ const addTransaction = () => {
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
   const [sending, setSending] = useState(false);
 
   const parsedAmount = parseFloat(amount);
   const isDebit = parsedAmount < 0;
+  const insufficientFunds = totalBalance - Math.abs(parsedAmount) < 0;
 
   const handleAdd = async () => {
     setSending(true);
 
-    const nextId =
-      transactions.length === 0
-        ? 1
-        : Math.max(...transactions.map((t) => t.id)) + 1;
-
-    const newTransaction = {
-      transactionDate: currentDate,
-      description,
-      category,
-      debit: isDebit ? Math.abs(parsedAmount) : null,
-      credit: !isDebit ? parsedAmount : null,
-      id: nextId,
-    };
-
-    const result = await postTransaction(newTransaction);
-
-    if (result) {
-      setMessage("Transactie toegevoegd!");
-      setDescription("");
-      setCategory("");
-      setAmount("");
+    if (isDebit && insufficientFunds) {
+      setErrorMessage("Er staat niet genoeg geld op uw rekening");
+      setSending(false);
 
       setTimeout(() => {
-        refetch();
-        router.replace("/transactions");
-        setSending(false);
-        setMessage("");
+        setErrorMessage("");
       }, 2000);
+    } else if (description === "" || category === "" || amount === "") {
+      setErrorMessage(
+        `${
+          description === ""
+            ? "Beschrijving"
+            : category === ""
+            ? "Categorie"
+            : "Bedrag"
+        } ontbreekt`
+      );
+      setSending(false);
+
+      setTimeout(() => {
+        setErrorMessage("");
+      }, 2000);
+    } else {
+      const nextId =
+        transactions.length === 0
+          ? 1
+          : Math.max(...transactions.map((t) => t.id)) + 1;
+
+      const newTransaction = {
+        transactionDate: currentDate,
+        description,
+        category,
+        debit: isDebit ? Math.abs(parsedAmount) : null,
+        credit: !isDebit ? parsedAmount : null,
+        id: nextId,
+      };
+
+      const result = await postTransaction(newTransaction);
+
+      if (result) {
+        setMessage("Transactie toegevoegd!");
+        setDescription("");
+        setCategory("");
+        setAmount("");
+
+        setTimeout(() => {
+          refetch();
+          router.replace("/transactions");
+          setSending(false);
+          setMessage("");
+        }, 2000);
+      }
     }
   };
 
   return (
     <View style={styles.container}>
-      {error && (
+      {errorMessage && (
         <View style={[styles.messageBox, styles.errorBox]}>
-          <Text style={styles.messageText}>{error}</Text>
+          <Text style={styles.messageText}>{errorMessage}</Text>
         </View>
       )}
       {message && (
