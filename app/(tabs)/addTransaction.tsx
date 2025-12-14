@@ -5,7 +5,9 @@ import { usePostTransaction } from "@/hooks/usePostTransaction";
 import { formatDate, formatNumberInput } from "@/utils/formatUtils";
 import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
+import * as Haptics from "expo-haptics";
 import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { Snackbar } from "react-native-paper";
 
 const addTransaction = () => {
   const { totalBalance, transactions, refetch } =
@@ -25,9 +27,9 @@ const addTransaction = () => {
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("");
   const [amount, setAmount] = useState("");
-  const [message, setMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [sending, setSending] = useState(false);
+  const [visible, setVisible] = useState(false);
 
   const parsedAmount = parseFloat(amount);
   const isDebit = parsedAmount < 0;
@@ -74,9 +76,10 @@ const addTransaction = () => {
       };
 
       const result = await postTransaction(newTransaction);
+      Haptics.notificationAsync(Haptics.NotificationFeedbackType.Success);
+      setVisible(true);
 
       if (result) {
-        setMessage("Transactie toegevoegd!");
         setDescription("");
         setCategory("");
         setAmount("");
@@ -85,7 +88,6 @@ const addTransaction = () => {
           refetch();
           router.replace("/transactions");
           setSending(false);
-          setMessage("");
         }, 2000);
       }
     }
@@ -96,11 +98,6 @@ const addTransaction = () => {
       {errorMessage && (
         <View style={[styles.messageBox, styles.errorBox]}>
           <Text style={styles.messageText}>{errorMessage}</Text>
-        </View>
-      )}
-      {message && (
-        <View style={[styles.messageBox, styles.successBox]}>
-          <Text style={styles.messageText}>{message}</Text>
         </View>
       )}
 
@@ -147,6 +144,15 @@ const addTransaction = () => {
           </Text>
         </Pressable>
       </View>
+
+      <Snackbar
+        visible={visible}
+        onDismiss={() => setVisible(false)}
+        duration={5000}
+        style={{ backgroundColor: COLORS.succesbg }}
+      >
+        <Text style={{ color: COLORS.dark }}>Transactie Verzonden!</Text>
+      </Snackbar>
     </View>
   );
 };
@@ -226,11 +232,6 @@ const getStyles = (COLORS: ColorsType) =>
     errorBox: {
       backgroundColor: COLORS.errorbg,
       borderColor: COLORS.debit,
-      borderWidth: 1,
-    },
-    successBox: {
-      backgroundColor: COLORS.succesbg,
-      borderColor: COLORS.credit,
       borderWidth: 1,
     },
     messageText: {

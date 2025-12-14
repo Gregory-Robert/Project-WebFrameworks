@@ -1,4 +1,5 @@
 import { Theme } from "@/types";
+import * as Haptics from "expo-haptics";
 import { createContext, useState, ReactNode } from "react";
 
 interface ThemeContextType {
@@ -16,6 +17,7 @@ export const ThemeProvider = ({ children }: { children: ReactNode }) => {
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Light);
   };
 
   return (
