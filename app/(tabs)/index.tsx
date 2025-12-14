@@ -1,25 +1,30 @@
 import { COLORS } from "@/constants/colors";
 import { TransactionsContext } from "@/context/TransactionsContext";
+import { UserContext } from "@/context/UserContext";
 import { useRouter } from "expo-router";
 import { useContext } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const Home = () => {
   const router = useRouter();
-  const { initializing, totalBalance, loading } = useContext(TransactionsContext);
+  const { initializing, totalBalance, loading } =
+    useContext(TransactionsContext);
+  const { username } = useContext(UserContext);
 
-  const isCredit = totalBalance !== undefined && totalBalance > 0;
+  const isCredit = totalBalance !== undefined && totalBalance >= 0;
 
   if (initializing || loading) {
     return (
       <View style={styles.container}>
         <Text style={styles.message}>Loading...</Text>
       </View>
-    )
+    );
   }
 
   return (
     <View style={styles.container}>
+      {username && <Text style={styles.username}>Welkom {username}</Text>}
+
       <Pressable
         style={styles.card}
         onPress={() => {
@@ -36,7 +41,7 @@ const Home = () => {
             { color: isCredit ? COLORS.credit : COLORS.debit },
           ]}
         >
-          {isCredit ? "+" : "-"}€{Math.abs(totalBalance)}
+          {isCredit ? "+" : "-"}€{Math.abs(totalBalance).toFixed(2)}
         </Text>
       </Pressable>
     </View>
@@ -48,6 +53,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: COLORS.light,
     paddingTop: 32,
+  },
+  username: {
+    fontSize: 28,
+    fontWeight: "bold",
+    color: "#999999",
+    textAlign: "center",
+    marginBottom: 24,
   },
   message: {
     fontSize: 28,
