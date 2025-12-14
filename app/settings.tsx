@@ -32,6 +32,7 @@ const Settings = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: COLORS.light,
   },
   card: {
     padding: 16,
