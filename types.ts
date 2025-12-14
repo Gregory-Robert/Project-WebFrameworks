@@ -6,3 +6,5 @@ export interface Transaction {
   credit: number | null;
   id: number;
 }
+
+export type Theme = "light" | "dark";

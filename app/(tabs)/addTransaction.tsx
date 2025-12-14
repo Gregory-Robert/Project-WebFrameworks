@@ -1,4 +1,5 @@
-import { COLORS } from "@/constants/colors";
+import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
+import { ThemeContext } from "@/context/ThemeContext";
 import { TransactionsContext } from "@/context/TransactionsContext";
 import { usePostTransaction } from "@/hooks/usePostTransaction";
 import { formatDate, formatNumberInput } from "@/utils/formatUtils";
@@ -10,6 +11,10 @@ const addTransaction = () => {
   const { totalBalance, transactions, refetch } =
     useContext(TransactionsContext);
   const { postTransaction } = usePostTransaction();
+  const { theme } = useContext(ThemeContext);
+
+  const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
+  const styles = getStyles(COLORS);
 
   const router = useRouter();
 
@@ -109,7 +114,7 @@ const addTransaction = () => {
         <TextInput
           style={styles.input}
           placeholder="Beschrijving"
-          placeholderTextColor="#999"
+          placeholderTextColor={COLORS.sub}
           value={description}
           onChangeText={setDescription}
           editable={!sending}
@@ -117,7 +122,7 @@ const addTransaction = () => {
         <TextInput
           style={styles.input}
           placeholder="Categorie"
-          placeholderTextColor="#999"
+          placeholderTextColor={COLORS.sub}
           value={category}
           onChangeText={setCategory}
           editable={!sending}
@@ -125,7 +130,7 @@ const addTransaction = () => {
         <TextInput
           style={styles.input}
           placeholder="Bedrag"
-          placeholderTextColor="#999"
+          placeholderTextColor={COLORS.sub}
           keyboardType="numeric"
           value={amount}
           onChangeText={(e) => setAmount(formatNumberInput(e))}
@@ -146,92 +151,94 @@ const addTransaction = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.light,
-    paddingTop: 32,
-  },
-  title: {
-    fontSize: 28,
-    fontWeight: "bold",
-    textAlign: "center",
-    color: "#999",
-    marginBottom: 24,
-  },
-  card: {
-    backgroundColor: COLORS.card,
-    padding: 16,
-    marginHorizontal: 16,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: COLORS.dark,
-    elevation: 5,
-    shadowColor: COLORS.dark,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-  },
-  row: {
-    flexDirection: "column",
-    marginBottom: 12,
-    flexWrap: "wrap",
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "400",
-    color: COLORS.dark,
-  },
-  value: {
-    fontSize: 20,
-    fontWeight: "600",
-    color: COLORS.dark,
-    flexShrink: 1,
-  },
-  input: {
-    backgroundColor: "#fff",
-    borderColor: COLORS.dark,
-    borderWidth: 1,
-    borderRadius: 12,
-    padding: 12,
-    marginBottom: 12,
-    fontSize: 16,
-    color: COLORS.dark,
-  },
-  button: {
-    backgroundColor: COLORS.credit,
-    padding: 14,
-    borderRadius: 12,
-    alignItems: "center",
-    marginTop: 8,
-  },
-  buttonText: {
-    color: "#fff",
-    fontWeight: "700",
-    fontSize: 16,
-  },
-  messageBox: {
-    margin: 16,
-    padding: 12,
-    borderRadius: 12,
-    marginBottom: 12,
-  },
-  errorBox: {
-    backgroundColor: "#ffcccc",
-    borderColor: "#ff4d4d",
-    borderWidth: 1,
-  },
-  successBox: {
-    backgroundColor: "#d4edda",
-    borderColor: "#28a745",
-    borderWidth: 1,
-  },
-  messageText: {
-    textAlign: "center",
-    color: "#333",
-    fontWeight: "600",
-    fontSize: 14,
-  },
-});
+type ColorsType = typeof LIGHT_COLORS;
+const getStyles = (COLORS: ColorsType) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.light,
+      paddingTop: 32,
+    },
+    title: {
+      fontSize: 28,
+      fontWeight: "bold",
+      textAlign: "center",
+      color: COLORS.sub,
+      marginBottom: 24,
+    },
+    card: {
+      backgroundColor: COLORS.card,
+      padding: 16,
+      marginHorizontal: 16,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: COLORS.dark,
+      elevation: 5,
+      shadowColor: COLORS.dark,
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+    },
+    row: {
+      flexDirection: "column",
+      marginBottom: 12,
+      flexWrap: "wrap",
+    },
+    label: {
+      fontSize: 16,
+      fontWeight: "400",
+      color: COLORS.dark,
+    },
+    value: {
+      fontSize: 20,
+      fontWeight: "600",
+      color: COLORS.dark,
+      flexShrink: 1,
+    },
+    input: {
+      backgroundColor: COLORS.light,
+      borderColor: COLORS.dark,
+      borderWidth: 1,
+      borderRadius: 12,
+      padding: 12,
+      marginBottom: 12,
+      fontSize: 16,
+      color: COLORS.dark,
+    },
+    button: {
+      backgroundColor: COLORS.credit,
+      padding: 14,
+      borderRadius: 12,
+      alignItems: "center",
+      marginTop: 8,
+    },
+    buttonText: {
+      color: COLORS.light,
+      fontWeight: "700",
+      fontSize: 16,
+    },
+    messageBox: {
+      margin: 16,
+      padding: 12,
+      borderRadius: 12,
+      marginBottom: 12,
+    },
+    errorBox: {
+      backgroundColor: COLORS.errorbg,
+      borderColor: COLORS.debit,
+      borderWidth: 1,
+    },
+    successBox: {
+      backgroundColor: COLORS.succesbg,
+      borderColor: COLORS.credit,
+      borderWidth: 1,
+    },
+    messageText: {
+      textAlign: "center",
+      color: COLORS.dark,
+      fontWeight: "600",
+      fontSize: 14,
+    },
+  });
 
 export default addTransaction;

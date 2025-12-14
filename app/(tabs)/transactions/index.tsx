@@ -1,6 +1,6 @@
 import { TransactionsContext } from "@/context/TransactionsContext";
 import TransactionItem from "@/components/TransactionItem";
-import { COLORS } from "@/constants/colors";
+import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
 import { useContext } from "react";
 import {
   ActivityIndicator,
@@ -10,10 +10,15 @@ import {
   Text,
   View,
 } from "react-native";
+import { ThemeContext } from "@/context/ThemeContext";
 
 const Transactions = () => {
   const { totalBalance, transactions, loading, error, refetch } =
     useContext(TransactionsContext);
+  const { theme } = useContext(ThemeContext);
+
+  const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
+  const styles = getStyles(COLORS);
 
   const onRefresh = () => {
     refetch();
@@ -56,7 +61,10 @@ const Transactions = () => {
         <Text
           style={[
             styles.balanceAmount,
-            { color: totalBalance >= 0 ? COLORS.credit : COLORS.debit },
+            {
+              color:
+                totalBalance >= 0 ? LIGHT_COLORS.credit : LIGHT_COLORS.debit,
+            },
           ]}
         >
           {totalBalance >= 0 ? "+" : "-"}€{Math.abs(totalBalance).toFixed(2)}
@@ -77,75 +85,77 @@ const Transactions = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.light,
-  },
-  overlay: {
-    position: "absolute",
-    top: 16,
-    left: 0,
-    right: 0,
-    alignItems: "center",
-    zIndex: 10,
-  },
-  center: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
-  },
-  loadingText: {
-    marginTop: 10,
-    fontSize: 16,
-    color: "#6b4e31",
-  },
-  errorText: {
-    color: "red",
-    fontSize: 16,
-    textAlign: "center",
-    marginBottom: 20,
-  },
-  emptyText: {
-    textAlign: "center",
-    marginTop: 50,
-    fontSize: 18,
-    color: "#999",
-  },
-  balanceCard: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 20,
-    backgroundColor: COLORS.card,
-    borderBottomWidth: 3,
-    borderBottomColor: COLORS.dark,
-    elevation: 7,
-    shadowColor: COLORS.dark,
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.14,
-    shadowRadius: 10,
-  },
-  balanceLeft: {
-    flex: 1,
-  },
-  balanceLabel: {
-    fontSize: 17,
-    fontWeight: "600",
-    color: COLORS.dark,
-  },
-  balanceDate: {
-    fontSize: 13,
-    color: COLORS.dark,
-    opacity: 0.7,
-    marginTop: 4,
-  },
-  balanceAmount: {
-    fontSize: 40,
-    fontWeight: "bold",
-    letterSpacing: -0.5,
-  },
-});
+type ColorsType = typeof LIGHT_COLORS;
+const getStyles = (COLORS: ColorsType) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.light,
+    },
+    overlay: {
+      position: "absolute",
+      top: 16,
+      left: 0,
+      right: 0,
+      alignItems: "center",
+      zIndex: 10,
+    },
+    center: {
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
+      padding: 20,
+    },
+    loadingText: {
+      marginTop: 10,
+      fontSize: 16,
+      color: COLORS.dark,
+    },
+    errorText: {
+      color: "red",
+      fontSize: 16,
+      textAlign: "center",
+      marginBottom: 20,
+    },
+    emptyText: {
+      textAlign: "center",
+      marginTop: 50,
+      fontSize: 18,
+      color: COLORS.sub,
+    },
+    balanceCard: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: 20,
+      backgroundColor: COLORS.card,
+      borderBottomWidth: 3,
+      borderBottomColor: COLORS.dark,
+      elevation: 7,
+      shadowColor: COLORS.dark,
+      shadowOffset: { width: 0, height: 4 },
+      shadowOpacity: 0.14,
+      shadowRadius: 10,
+    },
+    balanceLeft: {
+      flex: 1,
+    },
+    balanceLabel: {
+      fontSize: 17,
+      fontWeight: "600",
+      color: COLORS.dark,
+    },
+    balanceDate: {
+      fontSize: 13,
+      color: COLORS.dark,
+      opacity: 0.7,
+      marginTop: 4,
+    },
+    balanceAmount: {
+      fontSize: 40,
+      fontWeight: "bold",
+      letterSpacing: -0.5,
+    },
+  });
 
 export default Transactions;

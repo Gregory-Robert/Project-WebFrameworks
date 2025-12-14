@@ -1,14 +1,21 @@
-import { COLORS } from "@/constants/colors";
+import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
 import { DrawerActions } from "@react-navigation/native";
 import { useNavigation, useRouter, useSegments } from "expo-router";
 import Feather from "@expo/vector-icons/Feather";
 import { View, Text, StyleSheet, Pressable } from "react-native";
+import { useContext } from "react";
+import { ThemeContext } from "@/context/ThemeContext";
 
 interface HeaderProps {
   button: "menu" | "arrow";
 }
 
 const Header = ({ button }: HeaderProps) => {
+  const { theme } = useContext(ThemeContext);
+
+  const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
+  const styles = getStyles(COLORS);
+
   const navigation = useNavigation();
   const router = useRouter();
   const segments = useSegments();
@@ -47,28 +54,30 @@ const Header = ({ button }: HeaderProps) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flexDirection: "column",
-    alignItems: "flex-start",
-    justifyContent: "flex-end",
-    paddingTop: 35,
-    paddingBottom: 12,
-    paddingHorizontal: 16,
-    backgroundColor: COLORS.primary,
-    borderBottomWidth: 5,
-    borderBottomColor: COLORS.dark,
-  },
-  button: {
-    marginLeft: 16,
-  },
-  title: {
-    alignSelf: "center",
-    position: "absolute",
-    fontSize: 28,
-    fontWeight: "bold",
-    color: COLORS.dark,
-  },
-});
+type ColorsType = typeof LIGHT_COLORS;
+const getStyles = (COLORS: ColorsType) =>
+  StyleSheet.create({
+    container: {
+      flexDirection: "column",
+      alignItems: "flex-start",
+      justifyContent: "flex-end",
+      paddingTop: 35,
+      paddingBottom: 12,
+      paddingHorizontal: 16,
+      backgroundColor: COLORS.primary,
+      borderBottomWidth: 5,
+      borderBottomColor: COLORS.dark,
+    },
+    button: {
+      marginLeft: 16,
+    },
+    title: {
+      alignSelf: "center",
+      position: "absolute",
+      fontSize: 28,
+      fontWeight: "bold",
+      color: COLORS.dark,
+    },
+  });
 
 export default Header;

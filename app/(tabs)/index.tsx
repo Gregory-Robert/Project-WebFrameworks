@@ -1,4 +1,5 @@
-import { COLORS } from "@/constants/colors";
+import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
+import { ThemeContext } from "@/context/ThemeContext";
 import { TransactionsContext } from "@/context/TransactionsContext";
 import { UserContext } from "@/context/UserContext";
 import { useRouter } from "expo-router";
@@ -10,6 +11,10 @@ const Home = () => {
   const { initializing, totalBalance, loading } =
     useContext(TransactionsContext);
   const { username } = useContext(UserContext);
+  const { theme } = useContext(ThemeContext);
+
+  const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
+  const styles = getStyles(COLORS);
 
   const isCredit = totalBalance !== undefined && totalBalance >= 0;
 
@@ -38,7 +43,7 @@ const Home = () => {
         <Text
           style={[
             styles.amount,
-            { color: isCredit ? COLORS.credit : COLORS.debit },
+            { color: isCredit ? LIGHT_COLORS.credit : LIGHT_COLORS.debit },
           ]}
         >
           {isCredit ? "+" : "-"}€{Math.abs(totalBalance).toFixed(2)}
@@ -48,57 +53,59 @@ const Home = () => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: COLORS.light,
-    paddingTop: 32,
-  },
-  username: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#999999",
-    textAlign: "center",
-    marginBottom: 24,
-  },
-  message: {
-    fontSize: 28,
-    fontWeight: "bold",
-    color: "#999999",
-    textAlign: "center",
-    marginBottom: 24,
-  },
-  card: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    padding: 16,
-    backgroundColor: COLORS.card,
-    marginHorizontal: 16,
-    marginVertical: 8,
-    borderRadius: 16,
-    borderWidth: 1,
-    borderColor: COLORS.dark,
-    elevation: 5,
-    shadowColor: COLORS.dark,
-    shadowOffset: { width: 0, height: 3 },
-    shadowOpacity: 0.12,
-    shadowRadius: 8,
-  },
-  left: {
-    flexDirection: "row",
-    alignItems: "center",
-    flex: 1,
-  },
-  description: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: COLORS.dark,
-  },
-  amount: {
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-});
+type ColorsType = typeof LIGHT_COLORS;
+const getStyles = (COLORS: ColorsType) =>
+  StyleSheet.create({
+    container: {
+      flex: 1,
+      backgroundColor: COLORS.light,
+      paddingTop: 32,
+    },
+    username: {
+      fontSize: 28,
+      fontWeight: "bold",
+      color: COLORS.sub,
+      textAlign: "center",
+      marginBottom: 24,
+    },
+    message: {
+      fontSize: 28,
+      fontWeight: "bold",
+      color: COLORS.sub,
+      textAlign: "center",
+      marginBottom: 24,
+    },
+    card: {
+      flexDirection: "row",
+      justifyContent: "space-between",
+      alignItems: "center",
+      padding: 16,
+      backgroundColor: COLORS.card,
+      marginHorizontal: 16,
+      marginVertical: 8,
+      borderRadius: 16,
+      borderWidth: 1,
+      borderColor: COLORS.dark,
+      elevation: 5,
+      shadowColor: COLORS.dark,
+      shadowOffset: { width: 0, height: 3 },
+      shadowOpacity: 0.12,
+      shadowRadius: 8,
+    },
+    left: {
+      flexDirection: "row",
+      alignItems: "center",
+      flex: 1,
+    },
+    description: {
+      fontSize: 16,
+      fontWeight: "600",
+      color: COLORS.dark,
+    },
+    amount: {
+      fontSize: 18,
+      fontWeight: "bold",
+    },
+  });
 
 export default Home;
