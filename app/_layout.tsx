@@ -1,11 +1,11 @@
-import { Drawer } from "expo-router/drawer";
-import Feather from "@expo/vector-icons/Feather";
+import { Provider as PaperProvider } from "react-native-paper";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-import Header from "@/components/Header";
-import { UserProvider } from "@/context/UserContext";
 import { ThemeProvider } from "@/context/ThemeContext";
-import { Provider as PaperProvider } from "react-native-paper";
+import { UserProvider } from "@/context/UserContext";
+import Feather from "@expo/vector-icons/Feather";
+import { Drawer } from "expo-router/drawer";
+import Header from "@/components/Header";
 
 const RootLayout = () => {
   return (

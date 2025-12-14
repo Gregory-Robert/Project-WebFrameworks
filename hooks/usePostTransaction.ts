@@ -14,7 +14,7 @@ export const usePostTransaction = () => {
     setResponse(null);
 
     try {
-      const payload: any = {
+      const transaction: any = {
         transactionDate: transactionData.transactionDate,
         description: transactionData.description,
         category: transactionData.category,
@@ -30,7 +30,7 @@ export const usePostTransaction = () => {
             "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(payload),
+          body: JSON.stringify(transaction),
         }
       );
 

@@ -1,5 +1,5 @@
 export const LIGHT_MAP_STYLE = [
-  // Land / achtergrond
+  // Land
   {
     elementType: "geometry",
     stylers: [{ color: "#f1f3f4" }],
@@ -15,7 +15,7 @@ export const LIGHT_MAP_STYLE = [
     stylers: [{ color: "#f1f3f4" }],
   },
 
-  // Roads – basis
+  // Roads
   {
     featureType: "road",
     elementType: "geometry",
@@ -27,7 +27,7 @@ export const LIGHT_MAP_STYLE = [
     stylers: [{ color: "#d6d6d6" }],
   },
 
-  // Highways – extra contrast
+  // Highways
   {
     featureType: "road.highway",
     elementType: "geometry",
@@ -55,7 +55,7 @@ export const LIGHT_MAP_STYLE = [
 ];
 
 export const DARK_MAP_STYLE = [
-  // Land / achtergrond
+  // Land
   {
     elementType: "geometry",
     stylers: [{ color: "#202124" }],
@@ -71,7 +71,7 @@ export const DARK_MAP_STYLE = [
     stylers: [{ color: "#202124" }],
   },
 
-  // Roads – basis
+  // Roads
   {
     featureType: "road",
     elementType: "geometry",
@@ -83,7 +83,7 @@ export const DARK_MAP_STYLE = [
     stylers: [{ color: "#3b3b3b" }],
   },
 
-  // Highways – extra contrast
+  // Highways
   {
     featureType: "road.highway",
     elementType: "geometry",

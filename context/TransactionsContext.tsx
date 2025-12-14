@@ -1,6 +1,6 @@
 import { OPENING_BALANCE } from "@/constants/transactionConstants";
-import { useFetch } from "@/hooks/useFetch";
 import { usePostTransaction } from "@/hooks/usePostTransaction";
+import { useFetch } from "@/hooks/useFetch";
 import { Transaction } from "@/types";
 import {
   createContext,
@@ -31,10 +31,10 @@ export const TransactionsContext = createContext<TransactionsContextType>({
 export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
   const [transactions, setTransactions] = useState<Transaction[]>([]);
   const [initializing, setInitializing] = useState(true);
+
   const { loading, data, error, refetch } = useFetch<Transaction[]>(
     "https://sampleapis.assimilate.be/fakebank/accounts"
   );
-
   const { postTransaction } = usePostTransaction();
 
   const totalBalance = Number(
@@ -53,7 +53,7 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
       // Sort by id (Newest = highest id first)
       const sortedTransactions = [...data].sort((a, b) => b.id - a.id);
 
-      // //Included the opening balance so the API-derived total cannot result in a negative balance.
+      //Included the opening balance so the API-derived total cannot result in a negative balance.
       const hasOpeningBalance = sortedTransactions.some(
         (t) => t.description === OPENING_BALANCE.description
       );
@@ -61,7 +61,7 @@ export const TransactionsProvider = ({ children }: { children: ReactNode }) => {
         await postTransaction(OPENING_BALANCE);
         setTimeout(() => {
           refetch();
-        }, 1500);
+        }, 1500); // Fixed delay before refetch to avoid consistency issues
         return;
       }
 

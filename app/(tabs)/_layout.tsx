@@ -1,8 +1,8 @@
-import { Tabs } from "expo-router";
+import { TransactionsProvider } from "@/context/TransactionsContext";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import Octicons from "@expo/vector-icons/Octicons";
 import Header from "@/components/Header";
-import { TransactionsProvider } from "@/context/TransactionsContext";
+import { Tabs } from "expo-router";
 
 export default function TabLayout() {
   return (

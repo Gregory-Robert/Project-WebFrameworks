@@ -1,27 +1,27 @@
+import { TransactionsContext } from "@/context/TransactionsContext";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
 import { ThemeContext } from "@/context/ThemeContext";
-import { TransactionsContext } from "@/context/TransactionsContext";
 import { UserContext } from "@/context/UserContext";
 import { useRouter } from "expo-router";
 import { useContext } from "react";
-import { Pressable, StyleSheet, Text, View } from "react-native";
 
 const Home = () => {
-  const router = useRouter();
   const { initializing, totalBalance, loading } =
     useContext(TransactionsContext);
   const { username } = useContext(UserContext);
   const { theme } = useContext(ThemeContext);
-
   const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
   const styles = getStyles(COLORS);
+
+  const router = useRouter();
 
   const isCredit = totalBalance !== undefined && totalBalance >= 0;
 
   if (initializing || loading) {
     return (
       <View style={styles.container}>
-        <Text style={styles.message}>Loading...</Text>
+        <Text style={styles.message}>Laden...</Text>
       </View>
     );
   }
@@ -43,7 +43,7 @@ const Home = () => {
         <Text
           style={[
             styles.amount,
-            { color: isCredit ? LIGHT_COLORS.credit : LIGHT_COLORS.debit },
+            { color: isCredit ? COLORS.credit : COLORS.debit },
           ]}
         >
           {isCredit ? "+" : "-"}€{Math.abs(totalBalance).toFixed(2)}

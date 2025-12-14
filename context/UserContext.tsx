@@ -3,38 +3,38 @@ import { getName, setName, clearStorage } from "@/storage/asyncStorage";
 
 interface UserContextType {
   username: string;
-  setUsername: (name: string) => void;
+  changeUsername: (name: string) => void;
   resetUsername: () => void;
 }
 
 export const UserContext = createContext<UserContextType>({
   username: "",
-  setUsername: () => {},
+  changeUsername: () => {},
   resetUsername: () => {},
 });
 
 export const UserProvider = ({ children }: { children: ReactNode }) => {
-  const [username, _setUsername] = useState("");
+  const [username, setUsername] = useState("");
 
   useEffect(() => {
     (async () => {
       const stored = await getName<string>("name");
-      if (stored) _setUsername(stored);
+      if (stored) setUsername(stored);
     })();
   }, []);
 
-  const setUsername = (name: string) => {
-    _setUsername(name);
+  const changeUsername = (name: string) => {
+    setUsername(name);
     setName("name", name);
   };
 
   const resetUsername = () => {
-    _setUsername("");
+    setUsername("");
     clearStorage();
   };
 
   return (
-    <UserContext.Provider value={{ username, setUsername, resetUsername }}>
+    <UserContext.Provider value={{ username, changeUsername, resetUsername }}>
       {children}
     </UserContext.Provider>
   );

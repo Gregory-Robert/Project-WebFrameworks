@@ -1,6 +1,6 @@
-import { Theme } from "@/types";
-import * as Haptics from "expo-haptics";
 import { createContext, useState, ReactNode } from "react";
+import * as Haptics from "expo-haptics";
+import { Theme } from "@/types";
 
 interface ThemeContextType {
   theme: Theme;

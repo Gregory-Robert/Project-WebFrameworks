@@ -1,15 +1,15 @@
 import { TransactionsContext } from "@/context/TransactionsContext";
 import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
-import { useLocalSearchParams } from "expo-router";
-import { useContext } from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { formatDate } from "@/utils/formatUtils";
 import { ThemeContext } from "@/context/ThemeContext";
+import { StyleSheet, Text, View } from "react-native";
+import { useLocalSearchParams } from "expo-router";
+import { formatDate } from "@/utils/formatUtils";
+import { useContext } from "react";
 
 const TransactionDetail = () => {
   const { id } = useLocalSearchParams<{ id: string }>();
-  const { theme } = useContext(ThemeContext);
 
+  const { theme } = useContext(ThemeContext);
   const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
   const styles = getStyles(COLORS);
 
@@ -21,7 +21,7 @@ const TransactionDetail = () => {
   if (!transaction) {
     return (
       <View style={styles.container}>
-        <Text style={styles.notFound}>Transaction not found</Text>
+        <Text style={styles.notFound}>Transactie niet gevonden</Text>
       </View>
     );
   }
@@ -39,25 +39,25 @@ const TransactionDetail = () => {
         ]}
       >
         <View style={styles.row}>
-          <Text style={styles.label}>Description: </Text>
+          <Text style={styles.label}>Beschrijving: </Text>
           <Text style={styles.value}>{transaction?.description}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Category: </Text>
+          <Text style={styles.label}>Categorie: </Text>
           <Text style={styles.value}>{transaction?.category}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Date: </Text>
+          <Text style={styles.label}>Datum: </Text>
           <Text style={styles.value}>
             {formatDate(transaction.transactionDate)}
           </Text>
         </View>
         <View style={styles.row}>
-          <Text style={styles.label}>Amount: </Text>
+          <Text style={styles.label}>Bedrag: </Text>
           <Text
             style={[
               styles.amount,
-              { color: isCredit ? LIGHT_COLORS.credit : LIGHT_COLORS.debit },
+              { color: isCredit ? COLORS.credit : COLORS.debit },
             ]}
           >
             {isCredit ? "+" : "-"}€{formattedAmount}

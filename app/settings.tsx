@@ -1,4 +1,7 @@
+import { LIGHT_COLORS, DARK_COLORS } from "@/constants/colors";
+import { ThemeContext } from "@/context/ThemeContext";
 import { UserContext } from "@/context/UserContext";
+import { useContext } from "react";
 import {
   View,
   TextInput,
@@ -7,14 +10,11 @@ import {
   Text,
   Switch,
 } from "react-native";
-import { LIGHT_COLORS, DARK_COLORS } from "@/constants/colors";
-import { useContext } from "react";
-import { ThemeContext } from "@/context/ThemeContext";
 
 const Settings = () => {
-  const { username, setUsername, resetUsername } = useContext(UserContext);
-  const { theme, toggleTheme } = useContext(ThemeContext);
+  const { username, changeUsername, resetUsername } = useContext(UserContext);
 
+  const { theme, toggleTheme } = useContext(ThemeContext);
   const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
   const styles = getStyles(COLORS);
 
@@ -26,8 +26,8 @@ const Settings = () => {
           style={styles.input}
           value={username}
           placeholder="Vul hier je naam in"
-          placeholderTextColor={COLORS.dark + "99"}
-          onChangeText={setUsername}
+          placeholderTextColor={COLORS.dark}
+          onChangeText={changeUsername}
         />
         <View style={styles.buttonContainer}>
           <Button

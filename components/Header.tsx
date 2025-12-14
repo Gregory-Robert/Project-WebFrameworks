@@ -1,10 +1,10 @@
+import { useNavigation, useRouter, useSegments } from "expo-router";
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
 import { DrawerActions } from "@react-navigation/native";
-import { useNavigation, useRouter, useSegments } from "expo-router";
-import Feather from "@expo/vector-icons/Feather";
-import { View, Text, StyleSheet, Pressable } from "react-native";
-import { useContext } from "react";
 import { ThemeContext } from "@/context/ThemeContext";
+import Feather from "@expo/vector-icons/Feather";
+import { useContext } from "react";
 
 interface HeaderProps {
   button: "menu" | "arrow";
@@ -12,7 +12,6 @@ interface HeaderProps {
 
 const Header = ({ button }: HeaderProps) => {
   const { theme } = useContext(ThemeContext);
-
   const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
   const styles = getStyles(COLORS);
 

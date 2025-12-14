@@ -1,13 +1,13 @@
+import { View, Text, StyleSheet, Pressable } from "react-native";
 import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
 import { ThemeContext } from "@/context/ThemeContext";
-import { Transaction } from "@/types";
+import { formatDate } from "@/utils/formatUtils";
 import { useRouter } from "expo-router";
+import { Transaction } from "@/types";
 import { useContext } from "react";
-import { View, Text, StyleSheet, Pressable } from "react-native";
 
 const TransactionItem = ({ transaction }: { transaction: Transaction }) => {
   const { theme } = useContext(ThemeContext);
-
   const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
   const styles = getStyles(COLORS);
 
@@ -16,13 +16,6 @@ const TransactionItem = ({ transaction }: { transaction: Transaction }) => {
   const isCredit = transaction.credit !== undefined && transaction.credit! > 0;
   const amount = isCredit ? transaction.credit! : transaction.debit!;
   const formattedAmount = amount.toFixed(2);
-  const formattedDate = new Date(
-    transaction.transactionDate
-  ).toLocaleDateString("nl-BE", {
-    day: "2-digit",
-    month: "short",
-    year: "numeric",
-  });
 
   return (
     <Pressable
@@ -46,14 +39,16 @@ const TransactionItem = ({ transaction }: { transaction: Transaction }) => {
           <Text style={styles.description} numberOfLines={1}>
             {transaction.description}
           </Text>
-          <Text style={styles.date}>{formattedDate}</Text>
+          <Text style={styles.date}>
+            {formatDate(transaction.transactionDate)}
+          </Text>
         </View>
       </View>
 
       <Text
         style={[
           styles.amount,
-          { color: isCredit ? LIGHT_COLORS.credit : LIGHT_COLORS.debit },
+          { color: isCredit ? COLORS.credit : COLORS.debit },
         ]}
       >
         {isCredit ? "+" : "-"}€{formattedAmount}

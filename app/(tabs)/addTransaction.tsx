@@ -1,20 +1,19 @@
+import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
+import { TransactionsContext } from "@/context/TransactionsContext";
+import { formatDate, formatNumberInput } from "@/utils/formatUtils";
+import { usePostTransaction } from "@/hooks/usePostTransaction";
 import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
 import { ThemeContext } from "@/context/ThemeContext";
-import { TransactionsContext } from "@/context/TransactionsContext";
-import { usePostTransaction } from "@/hooks/usePostTransaction";
-import { formatDate, formatNumberInput } from "@/utils/formatUtils";
-import { useRouter } from "expo-router";
 import { useContext, useState } from "react";
-import * as Haptics from "expo-haptics";
-import { Pressable, StyleSheet, Text, TextInput, View } from "react-native";
 import { Snackbar } from "react-native-paper";
+import { useRouter } from "expo-router";
+import * as Haptics from "expo-haptics";
 
 const addTransaction = () => {
   const { totalBalance, transactions, refetch } =
     useContext(TransactionsContext);
   const { postTransaction } = usePostTransaction();
   const { theme } = useContext(ThemeContext);
-
   const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
   const styles = getStyles(COLORS);
 
@@ -64,7 +63,7 @@ const addTransaction = () => {
       const nextId =
         transactions.length === 0
           ? 1
-          : Math.max(...transactions.map((t) => t.id)) + 1;
+          : Math.max(...transactions.map((t) => t.id)) + 1; // Technically unnessecary since API sets ids
 
       const newTransaction = {
         transactionDate: currentDate,
@@ -101,11 +100,11 @@ const addTransaction = () => {
         </View>
       )}
 
-      <Text style={styles.title}>Add Transaction</Text>
+      <Text style={styles.title}>Nieuwe Transactie</Text>
 
       <View style={styles.card}>
         <View style={styles.row}>
-          <Text style={styles.label}>Date: </Text>
+          <Text style={styles.label}>Datum: </Text>
           <Text style={styles.value}>{formatDate(currentDate)}</Text>
         </View>
         <TextInput

@@ -1,8 +1,8 @@
-import React, { useRef, useEffect, useContext } from "react";
-import MapView, { Marker } from "react-native-maps";
-import { FAKEBANK_LOCATIONS } from "@/constants/fakebankBranches";
 import { DARK_MAP_STYLE, LIGHT_MAP_STYLE } from "@/constants/mapStyles";
+import { FAKEBANK_LOCATIONS } from "@/constants/fakebankBranches";
 import { ThemeContext } from "@/context/ThemeContext";
+import MapView, { Marker } from "react-native-maps";
+import React, { useRef, useContext } from "react";
 
 const Locations = () => {
   const { theme } = useContext(ThemeContext);

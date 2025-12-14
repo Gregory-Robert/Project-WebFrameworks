@@ -1,3 +1,4 @@
+// Format date from "2025-06-23" to "23 aug 2025".
 export const formatDate = (date: string): string => {
   return new Date(date).toLocaleDateString("nl-BE", {
     day: "2-digit",
@@ -6,6 +7,7 @@ export const formatDate = (date: string): string => {
   });
 };
 
+// Format string to a valid currency string
 export function formatNumberInput(input: string): string {
   // Keep only numbers, dot, comma, and optional leading minus
   let sanitized = input.replace(/[^0-9.,-]/g, "");
@@ -23,8 +25,8 @@ export function formatNumberInput(input: string): string {
   // Split on first dot
   const [integerPart, ...decimalParts] = sanitized.split(".");
 
+  // Join one dot and maximum 2 decimals
   let formatted = integerPart;
-
   if (decimalParts.length > 0) {
     const decimalPart = decimalParts.join("").slice(0, 2);
     formatted += "." + decimalPart;
@@ -42,4 +44,3 @@ export function formatNumberInput(input: string): string {
 
   return formatted;
 }
-

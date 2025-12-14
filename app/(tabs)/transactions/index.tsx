@@ -1,6 +1,7 @@
 import { TransactionsContext } from "@/context/TransactionsContext";
-import TransactionItem from "@/components/TransactionItem";
 import { DARK_COLORS, LIGHT_COLORS } from "@/constants/colors";
+import TransactionItem from "@/components/TransactionItem";
+import { ThemeContext } from "@/context/ThemeContext";
 import { useContext } from "react";
 import {
   ActivityIndicator,
@@ -10,13 +11,11 @@ import {
   Text,
   View,
 } from "react-native";
-import { ThemeContext } from "@/context/ThemeContext";
 
 const Transactions = () => {
   const { totalBalance, transactions, loading, error, refetch } =
     useContext(TransactionsContext);
   const { theme } = useContext(ThemeContext);
-
   const COLORS = theme === "light" ? LIGHT_COLORS : DARK_COLORS;
   const styles = getStyles(COLORS);
 
@@ -62,8 +61,7 @@ const Transactions = () => {
           style={[
             styles.balanceAmount,
             {
-              color:
-                totalBalance >= 0 ? LIGHT_COLORS.credit : LIGHT_COLORS.debit,
+              color: totalBalance >= 0 ? COLORS.credit : COLORS.debit,
             },
           ]}
         >
